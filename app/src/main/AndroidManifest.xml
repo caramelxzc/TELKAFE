@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Telkafers">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,12 +21,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".MainActivity" />
+
         <activity android:name=".LoginActivity" />
-
         <activity android:name=".CreateActivity" />
-
         <activity android:name=".WelcomeActivity" />
-
         <activity android:name=".HomeActivity" />
 
         <meta-data
