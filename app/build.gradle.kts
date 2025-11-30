@@ -27,11 +27,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        // Menggunakan Java 17 sangat direkomendasikan untuk compileSdk terbaru
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
@@ -45,6 +46,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Perbarui ke versi RecyclerView terbaru (stabil)
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    // CardView (1.0.0 sudah stabil)
     implementation("androidx.cardview:cardview:1.0.0")
+    // Tambahkan dependensi jika menggunakan BottomNavigationView
+    implementation("com.google.android.material:material:1.11.0")
 }

@@ -1,16 +1,26 @@
 package com.candra.telkafers
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout // Untuk ConstraintLayout
+import androidx.core.content.ContextCompat // Untuk ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class CategoryAdapter(private val categoryList: List<Category>) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+class CategoryAdapter(private val categoryList: ArrayList<Category>) :
+    RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
-    class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvName: TextView = itemView.findViewById(R.id.tvCategoryName)
+    // Definisikan ID warna sesuai colors.xml
+    private val COLOR_RED_PRIMARY = R.color.red_primary
+    private val COLOR_TEXT_DARK = R.color.text_dark
+
+    inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val categoryContainer: ConstraintLayout = itemView.findViewById(R.id.categoryContainer)
+        val iconBackground: ConstraintLayout = itemView.findViewById(R.id.iconBackground)
+        val imgCategoryIcon: ImageView = itemView.findViewById(R.id.imgCategoryIcon)
+        val tvCategoryName: TextView = itemView.findViewById(R.id.tvCategoryName)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -19,18 +29,27 @@ class CategoryAdapter(private val categoryList: List<Category>) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val category = categoryList[position]
-        holder.tvName.text = category.name
+        val item = categoryList[position]
+        val context = holder.itemView.context
 
-        // Ubah warna background jika dipilih
-        if (category.isSelected) {
-            holder.tvName.setBackgroundResource(R.drawable.bg_category_selected)
-            holder.tvName.setTextColor(Color.WHITE)
+        holder.tvCategoryName.text = item.name
+        holder.imgCategoryIcon.setImageResource(item.iconResId)
+
+        if (item.isSelected) {
+            holder.iconBackground.setBackgroundResource(R.drawable.bg_category_selected)
+            holder.tvCategoryName.setTextColor(ContextCompat.getColor(context, COLOR_RED_PRIMARY))
         } else {
-            holder.tvName.setBackgroundResource(R.drawable.bg_category_unselected)
-            holder.tvName.setTextColor(Color.BLACK)
+            holder.iconBackground.setBackgroundResource(R.drawable.bg_category_unselected)
+            holder.tvCategoryName.setTextColor(ContextCompat.getColor(context, COLOR_TEXT_DARK))
+        }
+
+        holder.categoryContainer.setOnClickListener {
+            for (i in categoryList.indices) {
+                categoryList[i].isSelected = (i == position)
+            }
+            notifyDataSetChanged()
         }
     }
 
-    override fun getItemCount(): Int = categoryList.size
+    override fun getItemCount() = categoryList.size
 }
