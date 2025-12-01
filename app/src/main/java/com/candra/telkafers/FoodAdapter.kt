@@ -3,23 +3,22 @@ package com.candra.telkafers
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton // Jika ada tombol cart
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class FoodAdapter(private val foodList: List<Food>) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
+// PERBAIKAN: Tambahkan parameter kedua (listener) ke konstruktor
+class FoodAdapter(
+    private val foodList: List<Food>,
+    private val onItemClicked: (Food) -> Unit // <--- PASTI BARIS INI ADA
+) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        // --- TAMBAHKAN INI ---
-        val imgFood: ImageView = itemView.findViewById(R.id.imgFood) // ID ImageView di item_food.xml
-        // ---------------------
-
+        val imgFood: ImageView = itemView.findViewById(R.id.imgFood)
         val tvName: TextView = itemView.findViewById(R.id.tvFoodName)
         val tvPrice: TextView = itemView.findViewById(R.id.tvFoodPrice)
-        // Tambahkan ImageButton untuk Cart jika ada di item_food.xml
+        // ASUMSI: Tombol keranjang Anda memiliki ID btnAddCart (cek item_food.xml Anda)
+        val btnAddCart: ImageView = itemView.findViewById(R.id.btnAddCart)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
@@ -30,16 +29,22 @@ class FoodAdapter(private val foodList: List<Food>) : RecyclerView.Adapter<FoodA
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
         val food = foodList[position]
 
-        // --- TAMBAHKAN INI ---
-        holder.imgFood.setImageResource(food.imageResId) // Set gambar dari data Food
-        // ---------------------
-
+        holder.imgFood.setImageResource(food.imageResId)
         holder.tvName.text = food.name
         holder.tvPrice.text = food.price
 
-        holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context, "Memilih: ${food.name}", Toast.LENGTH_SHORT).show()
+        // Tambahkan Listener ke tombol keranjang (atau seluruh item)
+        // Ini yang memanggil lambda 'onItemClicked'
+        holder.btnAddCart.setOnClickListener {
+            onItemClicked(food)
         }
+
+        // Opsi lain: Jika klik di seluruh area item:
+        /*
+        holder.itemView.setOnClickListener {
+             onItemClicked(food)
+        }
+        */
     }
 
     override fun getItemCount(): Int {

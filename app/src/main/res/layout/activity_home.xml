@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".HomeActivity">
+    android:background="#FFFFFF"   tools:context=".HomeActivity">
 
     <ImageView
         android:id="@+id/imgProfile"
@@ -39,8 +38,7 @@
         android:layout_height="24dp"
         android:layout_marginEnd="24dp"
         android:src="@drawable/cart"
-        app:layout_constraintBottom_toBottomOf="@+id/imgProfile"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/imgProfile"  app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imgProfile"
         tools:ignore="ContentDescription" />
 
@@ -86,14 +84,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        android:fillViewport="false"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintTop_toBottomOf="@+id/searchContainer">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="24dp">
+            android:paddingBottom="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bannerContainer"
@@ -164,12 +162,13 @@
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_marginEnd="16dp"
-                    android:src="@drawable/foto1"
+                    android:src="@drawable/ayamgeprek"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="ContentDescription" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -217,16 +216,19 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvMostPopular"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginHorizontal="24dp"
+                android:layout_marginHorizontal="0dp"
                 android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                android:paddingHorizontal="24dp"
+                android:paddingBottom="100dp"
+                android:clipToPadding="false"
                 app:spanCount="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvPopularTitle"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:itemCount="6"
                 tools:listitem="@layout/item_food" />
 
