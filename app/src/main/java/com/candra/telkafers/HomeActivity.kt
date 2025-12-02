@@ -1,4 +1,4 @@
-// HomeActivity.kt (Kode Sudah Diperbaiki dan Diintegrasikan dengan CartManager)
+// HomeActivity.kt
 
 package com.candra.telkafers
 
@@ -22,20 +22,20 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var rvCategories: RecyclerView
     private lateinit var categoryAdapter: CategoryAdapter
-    // Asumsi class Category tersedia
 
     private lateinit var rvMostPopular: RecyclerView
     private lateinit var foodAdapter: FoodAdapter
-    private lateinit var foodList: ArrayList<Food> // Menggunakan Food yang sudah diperbaiki
+    private lateinit var foodList: ArrayList<Food>
 
     private lateinit var tvGreeting: TextView
+    private lateinit var imgBannerFood: ImageView
 
     // Data item Ayam Geprek untuk Banner
     private val favoriteBannerFood = Food(
         id = 100, // ID unik untuk item banner
         name = "Ayam Geprek",
-        price = 10000, // Harga Int
-        imageUrl = R.drawable.ayamgeprek
+        price = 10000,
+        imageUrl = R.drawable.ayamgeprek // ID Resource gambar
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,18 +50,19 @@ class HomeActivity : AppCompatActivity() {
         val imgCart = findViewById<ImageView>(R.id.imgCart)
         val btnBannerOrder = findViewById<Button>(R.id.btnBannerOrder)
 
+        imgBannerFood = findViewById(R.id.imgBannerFood)
+        imgBannerFood.setImageResource(favoriteBannerFood.imageUrl)
+
         // Aksi Ikon Keranjang (My Basket)
         imgCart.setOnClickListener {
             val intent = Intent(this, CartActivity::class.java)
             startActivity(intent)
         }
 
-        // 🚨 PERBAIKAN: Aksi Tombol Order Now di Banner
+        // Aksi Tombol Order Now di Banner
         btnBannerOrder.setOnClickListener {
-            CartManager.addItem(favoriteBannerFood) // Tambahkan item banner ke keranjang
+            CartManager.addItem(favoriteBannerFood)
             Toast.makeText(this, "${favoriteBannerFood.name} ditambahkan ke keranjang!", Toast.LENGTH_SHORT).show()
-            // Opsional: Langsung pindah ke CartActivity setelah order
-            // startActivity(Intent(this, CartActivity::class.java))
         }
 
         // --- 2. SETUP KATEGORI (HORIZONTAL LIST) ---
@@ -69,13 +70,21 @@ class HomeActivity : AppCompatActivity() {
         rvCategories.setHasFixedSize(true)
         rvCategories.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        // Asumsi data dan adapter Category sudah benar
+        // 🟢 PERBAIKAN: INISIALISASI DATA KATEGORI
         val categoryList = ArrayList<Category>()
-        // ... (data category) ...
+
+        // Catatan: Ganti R.drawable.ic_drink, dsb., dengan NAMA RESOURCE IKON ANDA yang sebenarnya.
+        categoryList.add(Category(name = "Drinks", iconResId = R.drawable.cafe, isSelected = true))
+        categoryList.add(Category(name = "Main Course", iconResId = R.drawable.ricebowl))
+        categoryList.add(Category(name = "Snacks", iconResId = R.drawable.fries))
+        categoryList.add(Category(name = "Desserts", iconResId = R.drawable.doughnut))
+
+        categoryAdapter = CategoryAdapter(categoryList)
+        rvCategories.adapter = categoryAdapter
 
         // --- 3. SETUP MENU MAKANAN POPULER (GRID 2 KOLOM) ---
         rvMostPopular = findViewById(R.id.rvMostPopular)
-        rvMostPopular.setHasFixedSize(false) // Penting untuk ScrollView
+        rvMostPopular.setHasFixedSize(false)
 
         val spacingInDp = 16
         val spacingInPixels = (spacingInDp * resources.displayMetrics.density).toInt()
@@ -92,12 +101,8 @@ class HomeActivity : AppCompatActivity() {
             )
         )
 
-        // =================================================================
-        // PERBAIKAN UTAMA: INISIALISASI foodList dengan data yang benar (ID, Price: Int)
-        // =================================================================
-
+        // INISIALISASI foodList
         foodList = ArrayList()
-        // 🚨 PERBAIKAN: Menggunakan Food(id: Int, name: String, price: Int, imageUrl: Int)
         foodList.add(Food(1, "Ayam Geprek", 10000, R.drawable.ayamgeprek))
         foodList.add(Food(2, "Es Teh", 3000, R.drawable.esteh))
         foodList.add(Food(3, "Nescafe", 8000, R.drawable.nescafe))
@@ -105,20 +110,14 @@ class HomeActivity : AppCompatActivity() {
         foodList.add(Food(5, "Chiken Katsu", 13000, R.drawable.katsu))
         foodList.add(Food(6, "Jus Mangga", 5000, R.drawable.jusmangga))
 
-
-        // 🚨 PERBAIKAN: Inisialisasi FoodAdapter dengan listener CartManager
+        // Inisialisasi FoodAdapter dengan listener CartManager
         foodAdapter = FoodAdapter(foodList) { clickedFood ->
-
-            // 1. Tambahkan item ke CartManager (logika keranjang)
             CartManager.addItem(clickedFood)
-
             Toast.makeText(this, "${clickedFood.name} ditambahkan ke keranjang!", Toast.LENGTH_SHORT).show()
-
-            // 2. Pindah ke CartActivity (My Basket)
             startActivity(Intent(this, CartActivity::class.java))
         }
 
-        // 3.3 Set adapter ke RecyclerView
+        // Set adapter ke RecyclerView
         rvMostPopular.adapter = foodAdapter
 
         // --- 4. SETUP BOTTOM NAVIGATION (Logika Navigasi) ---
@@ -141,7 +140,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun loadUserName() {
         val sharedPref = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val username = sharedPref.getString(USERNAME_KEY, "User") // Ubah default menjadi "User"
+        val username = sharedPref.getString(USERNAME_KEY, "User")
 
         if (::tvGreeting.isInitialized) {
             tvGreeting.text = "Hi, $username!"

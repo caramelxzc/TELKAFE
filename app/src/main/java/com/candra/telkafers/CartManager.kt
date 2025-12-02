@@ -10,7 +10,10 @@ object CartManager {
      * Menambahkan atau memperbarui item di keranjang dari Food item.
      */
     fun addItem(food: Food) {
-        val existingItem = cartItems.find { it.id == food.id }
+        // Cek berdasarkan foodId (ID unik item makanan)
+        val existingItem = cartItems.find { it.foodId == food.id }
+
+        // Catatan: Asumsi food.id adalah unique ID untuk makanan
 
         if (existingItem != null) {
             // Item sudah ada, tambahkan kuantitasnya
@@ -19,17 +22,17 @@ object CartManager {
 
             // Perbarui item lama dengan fungsi copy()
             val updatedItem = existingItem.copy(quantity = newQuantity)
-
             cartItems[index] = updatedItem
 
         } else {
             // Item belum ada, tambahkan item baru dengan kuantitas 1
             val newItem = CartItem(
                 id = food.id,
+                foodId = food.id,              // ⬅️ PERBAIKAN: foodId ditambahkan
                 foodName = food.name,
                 basePrice = food.price,
                 quantity = 1,
-                imageUrl = food.imageUrl
+                imageResourceId = food.imageUrl // ⬅️ PERBAIKAN: Mengambil ID drawable dari food.imageUrl
             )
             cartItems.add(newItem)
         }
