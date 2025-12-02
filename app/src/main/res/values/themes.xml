@@ -1,9 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.Telkafers" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowContentOverlay">@null</item>
+
+        <item name="android:overScrollMode">never</item>
     </style>
 
     <style name="Theme.Telkafers" parent="Base.Theme.Telkafers" />
+
+    <style name="Style.FlatCardView" parent="Widget.Material3.CardView.Filled">
+        <item name="cardElevation">0dp</item>
+        <item name="cardUseCompatPadding">false</item>
+    </style>
 </resources>

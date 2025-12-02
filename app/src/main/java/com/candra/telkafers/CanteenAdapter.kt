@@ -1,3 +1,4 @@
+// CanteenAdapter.kt
 package com.candra.telkafers
 
 import android.graphics.Color
@@ -7,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.candra.telkafers.R
+
 
 class CanteenAdapter(
     private val canteenList: List<Canteen>,
@@ -15,10 +16,11 @@ class CanteenAdapter(
 ) : RecyclerView.Adapter<CanteenAdapter.CanteenViewHolder>() {
 
     inner class CanteenViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // 🚨 PERBAIKAN: Memastikan ID yang dicari ada di item_canteen.xml (seperti yang Anda definisikan)
         val imgCanteen: ImageView = itemView.findViewById(R.id.imgCanteen)
-        val tvCanteenName: TextView = itemView.findViewById(R.id.tvCanteenName)
-        val tvCanteenDescription: TextView = itemView.findViewById(R.id.tvCanteenDescription)
-        val tvStatus: TextView = itemView.findViewById(R.id.tvStatus)
+        val tvCanteenName: TextView = itemView.findViewById(R.id.tvCanteenName)       // 🟢 Ditemukan di XML (Perbaikan 1)
+        val tvCanteenDescription: TextView = itemView.findViewById(R.id.tvCanteenDescription) // 🟢 Ditemukan di XML (Perbaikan 2)
+        val tvStatus: TextView = itemView.findViewById(R.id.tvStatus)                 // 🟢 Ditemukan di XML (Perbaikan 3)
 
         fun bind(canteen: Canteen, clickListener: (Canteen) -> Unit) {
             imgCanteen.setImageResource(canteen.imageUrl)
@@ -41,6 +43,7 @@ class CanteenAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CanteenViewHolder {
+        // ASUMSI: Layout file yang digunakan adalah R.layout.item_canteen
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_canteen, parent, false)
         return CanteenViewHolder(view)
     }
