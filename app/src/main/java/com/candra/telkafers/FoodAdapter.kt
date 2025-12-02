@@ -1,3 +1,4 @@
+// FoodAdapter.kt
 package com.candra.telkafers
 
 import android.view.LayoutInflater
@@ -6,18 +7,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.NumberFormat
+import java.util.Locale
 
-// PERBAIKAN: Tambahkan parameter kedua (listener) ke konstruktor
 class FoodAdapter(
     private val foodList: List<Food>,
-    private val onItemClicked: (Food) -> Unit // <--- PASTI BARIS INI ADA
+    private val onItemClicked: (Food) -> Unit
 ) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imgFood: ImageView = itemView.findViewById(R.id.imgFood)
         val tvName: TextView = itemView.findViewById(R.id.tvFoodName)
         val tvPrice: TextView = itemView.findViewById(R.id.tvFoodPrice)
-        // ASUMSI: Tombol keranjang Anda memiliki ID btnAddCart (cek item_food.xml Anda)
+
+        // 🟢 PERBAIKAN KRITIS: ID diubah dari R.id.imgAddToCart menjadi R.id.btnAddCart
+        // Agar sesuai dengan android:id="@+id/btnAddCart" di item_food.xml Anda.
         val btnAddCart: ImageView = itemView.findViewById(R.id.btnAddCart)
     }
 
@@ -29,22 +33,19 @@ class FoodAdapter(
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
         val food = foodList[position]
 
-        holder.imgFood.setImageResource(food.imageResId)
-        holder.tvName.text = food.name
-        holder.tvPrice.text = food.price
+        // Format harga ke Rupiah
+        val formatter = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
+        formatter.maximumFractionDigits = 0
 
-        // Tambahkan Listener ke tombol keranjang (atau seluruh item)
-        // Ini yang memanggil lambda 'onItemClicked'
+        // Asumsi food.imageUrl dan food.price: Int sudah diperbaiki di Food.kt
+        holder.imgFood.setImageResource(food.imageUrl)
+        holder.tvName.text = food.name
+        holder.tvPrice.text = formatter.format(food.price)
+
+        // Listener memanggil CartManager.addItem() melalui HomeActivity
         holder.btnAddCart.setOnClickListener {
             onItemClicked(food)
         }
-
-        // Opsi lain: Jika klik di seluruh area item:
-        /*
-        holder.itemView.setOnClickListener {
-             onItemClicked(food)
-        }
-        */
     }
 
     override fun getItemCount(): Int {
